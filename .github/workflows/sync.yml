@@ -29,6 +29,13 @@ jobs:
         path: target
         fetch-depth: 0   # IMPORTANT
 
+    - name: Restore .github if missing
+      run: |
+        if [ ! -d "target/.github" ]; then
+          echo "Restoring .github from source"
+          cp -r target/.github source/.github
+        fi
+
     # Update target branch to latest
     - name: Update Target Branch
       run: |
