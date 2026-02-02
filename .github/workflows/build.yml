@@ -31,7 +31,7 @@ jobs:
 
     - name: Sync with Target Branch
       run: |
-        git fetch deploy release2 || true
+        git fetch deploy release || true
         git checkout -B temp-sync
-        git rebase deploy/release2 || true
-        git push deploy temp-sync:release2
+        git rebase deploy/release || true
+        git push deploy temp-sync:release
