@@ -49,8 +49,6 @@ jobs:
       run: |
         rsync -av \
           --delete \
-          --exclude='.github/' \
-          --filter='P .github/' \
           source/ target/
 
     # Commit & Push
