@@ -1,4 +1,4 @@
-name: Sync Code to Deploy Repo
+name: Sync Code to Repo2
 
 on:
   push:
@@ -12,32 +12,30 @@ jobs:
 
     steps:
 
-    # Clone Repo1 (Source) into /source
-    - name: Checkout Source Repo
+    # Clone Repo1 → source/
+    - name: Checkout Source
       uses: actions/checkout@v4
       with:
         path: source
 
-    # Clone Repo2 (Target) into /target
-    - name: Checkout Target Repo
+    # Clone Repo2 → target/
+    - name: Checkout Target
       uses: actions/checkout@v4
       with:
-        repository: jayakrishna2455/test2   # Repo2
+        repository: jayakrishna2455/test2
         token: ${{ secrets.TARGET_REPO_TOKEN }}
         ref: release2
         path: target
 
-    # Copy files (exclude protected ones)
-    - name: Sync Files (Exclude Protected)
+    # Copy files except .github
+    - name: Sync Files (Exclude .github)
       run: |
         rsync -av --delete \
           --exclude='.github/' \
-          --exclude='.env' \
-          --exclude='secrets/' \
           --filter='P .github/' \
           source/ target/
 
-    # Commit & Push in Repo2
+    # Commit & Push to Repo2
     - name: Commit and Push
       run: |
         cd target
@@ -45,7 +43,9 @@ jobs:
         git config user.name "sync-bot"
         git config user.email "sync-bot@github.com"
 
+        git checkout -B release2
+
         git add .
-        git commit -m "Auto sync from Repo1 (test branch)" || echo "No changes"
+        git commit -m "Auto sync from Repo1 (test)" || echo "No changes"
 
         git push origin release2
