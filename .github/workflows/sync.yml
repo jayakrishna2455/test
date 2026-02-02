@@ -27,16 +27,17 @@ jobs:
         token: ${{ secrets.TARGET_REPO_TOKEN }}
         ref: release
         path: target
-        fetch-depth: 0   # IMPORTANT
+        fetch-depth: 0
 
+    # Restore .github if missing (ONE-TIME safety)
     - name: Restore .github if missing
       run: |
         if [ ! -d "target/.github" ]; then
           echo "Restoring .github from source"
-          cp -r target/.github source/.github
+          cp -r source/.github target/.github
         fi
 
-    # Update target branch to latest
+    # Update target branch
     - name: Update Target Branch
       run: |
         cd target
@@ -44,11 +45,12 @@ jobs:
         git checkout release
         git pull origin release
 
-    # Sync files (FULLY protect .github)
+    # Sync files (Protect .github)
     - name: Sync Files (Protect .github)
       run: |
-        rsync -av \
-          --delete \
+        rsync -av --delete \
+          --exclude='.github/' \
+          --filter='P .github/' \
           source/ target/
 
     # Commit & Push
@@ -62,7 +64,6 @@ jobs:
         git status
 
         git add .
-
         git commit -m "Auto sync from Repo1 (test)" || echo "No changes"
 
         git push origin release
