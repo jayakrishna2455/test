@@ -60,4 +60,4 @@ jobs:
 
         git commit -m "Auto sync from Repo1 (test)" || echo "No changes"
 
-        git push origin release2
+        git push origin release
