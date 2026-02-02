@@ -25,7 +25,7 @@ jobs:
       with:
         repository: jayakrishna2455/test2
         token: ${{ secrets.TARGET_REPO_TOKEN }}
-        ref: release2
+        ref: release
         path: target
         fetch-depth: 0   # IMPORTANT
 
@@ -34,8 +34,8 @@ jobs:
       run: |
         cd target
         git fetch origin
-        git checkout release2
-        git pull origin release2
+        git checkout release
+        git pull origin release
 
     # Sync files (FULLY protect .github)
     - name: Sync Files (Protect .github)
