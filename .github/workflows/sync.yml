@@ -42,16 +42,17 @@ jobs:
     - name: Commit and Push
       run: |
         cd target
-
+    
         git config user.name "sync-bot"
         git config user.email "sync-bot@github.com"
-
-        # Make sure we are on correct branch
-        git checkout release2
-
+    
+        # Create or switch to release2 branch
+        git checkout -B release2
+    
         git status
-
+    
         git add .
         git commit -m "Auto sync from Repo1 (test)" || echo "No changes"
-
+    
         git push https://${{ secrets.TARGET_REPO_TOKEN }}@github.com/jayakrishna2455/test2.git release2
+
